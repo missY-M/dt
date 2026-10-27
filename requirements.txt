@@ -1,0 +1,8 @@
+# EdgeSimPy 的包名在常规 PyPI 索引不可获取，固定官方 Git 提交安装。
+edge_sim_py @ git+https://github.com/EdgeSimPy/EdgeSimPy.git@76eb5ead74596bb4240759fa4336f1d6f190c70a
+Mesa==1.2.1
+networkx==3.4.2
+msgpack==1.2.3
+numpy==2.2.6
+matplotlib==3.10.9
+pytest==9.1.1

@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "scenario": "第一阶段：静态需求画像、能力画像与基础调度",
+    "data_source": "synthetic；参数为可复现实验的合成配置，不代表任何真实硬件或模型的实测结果",
+    "quality_semantics": "quality_by_input 是给定输入类别下的统计能力参数，用于估计质量达标；不是每次推理的正确性，也不是已经测得的真实准确率",
+    "memory_semantics": "节点 memory_mb 是扣除常驻模型后可用于任务执行的内存；任务运行期间占用其 memory_mb",
+    "units": "时间：秒；计算量：GFLOP；算力：GFLOP/s；内存和数据量：十进制 MB，即 1 MB = 1000000 字节；带宽：MB/s",
+    "execution_semantics": "每个请求包含两类预定义的并行子任务，各类恰好一个；每节点一个执行槽；全部结果到达后进行一次结果汇聚",
+    "deadline_semantics": "request_deadline_s_range 是相对到达时刻的时间预算；生成轨迹中的 deadline_s 是绝对截止时刻",
+    "model_selection": "每节点每任务类型只配置一个模型，避免把模型选择与本阶段节点分配混为一体",
+    "scope": "静态画像；未加入状态信息陈旧、模型能力漂移或模型训练；所有策略共享同一轨迹"
+  },
+  "tick_s": 0.01,
+  "request_count": 120,
+  "seeds": [11, 22, 33, 44, 55],
+  "arrival_rates": [0.5, 1.0, 2.0],
+  "beam_width": 32,
+  "matching_weights": [0.5, 0.4, 0.1],
+  "matching_weight": 0.15,
+  "backbone_bandwidth_mb_s": 30.0,
+  "backbone_latency_s": 0.005,
+  "max_drain_s": 120.0,
+  "task_types": [
+    {
+      "task_type": "image_classification",
+      "input_classes": ["easy", "hard"],
+      "min_quality_values": [0.75, 0.85],
+      "work_gflop_range": [5.0, 9.0],
+      "memory_mb": 256.0,
+      "input_mb_range": [1.0, 4.0],
+      "output_mb": 0.02
+    },
+    {
+      "task_type": "object_detection",
+      "input_classes": ["easy", "hard"],
+      "min_quality_values": [0.75, 0.85],
+      "work_gflop_range": [7.0, 13.0],
+      "memory_mb": 768.0,
+      "input_mb_range": [2.0, 6.0],
+      "output_mb": 0.10
+    }
+  ],
+  "request_deadline_s_range": [2.0, 4.0],
+  "aggregation_s": 0.02,
+  "nodes": [
+    {
+      "node_id": "edge_01",
+      "cpu_gflops": 14.0,
+      "memory_mb": 512.0,
+      "bandwidth_mb_s": 18.0,
+      "latency_s": 0.010,
+      "capabilities": [
+        {"model_id": "synthetic_cls_a", "task_type": "image_classification", "quality_by_input": {"easy": 0.94, "hard": 0.80}, "compute_factor": 0.90},
+        {"model_id": "synthetic_det_a", "task_type": "object_detection", "quality_by_input": {"easy": 0.90, "hard": 0.76}, "compute_factor": 1.40}
+      ]
+    },
+    {
+      "node_id": "edge_02",
+      "cpu_gflops": 24.0,
+      "memory_mb": 1024.0,
+      "bandwidth_mb_s": 24.0,
+      "latency_s": 0.008,
+      "capabilities": [
+        {"model_id": "synthetic_cls_b", "task_type": "image_classification", "quality_by_input": {"easy": 0.91, "hard": 0.85}, "compute_factor": 1.10},
+        {"model_id": "synthetic_det_b", "task_type": "object_detection", "quality_by_input": {"easy": 0.93, "hard": 0.87}, "compute_factor": 1.10}
+      ]
+    },
+    {
+      "node_id": "edge_03",
+      "cpu_gflops": 32.0,
+      "memory_mb": 1024.0,
+      "bandwidth_mb_s": 18.0,
+      "latency_s": 0.012,
+      "capabilities": [
+        {"model_id": "synthetic_cls_c", "task_type": "image_classification", "quality_by_input": {"easy": 0.88, "hard": 0.73}, "compute_factor": 0.80},
+        {"model_id": "synthetic_det_c", "task_type": "object_detection", "quality_by_input": {"easy": 0.89, "hard": 0.83}, "compute_factor": 0.80}
+      ]
+    },
+    {
+      "node_id": "edge_04",
+      "cpu_gflops": 18.0,
+      "memory_mb": 768.0,
+      "bandwidth_mb_s": 30.0,
+      "latency_s": 0.006,
+      "capabilities": [
+        {"model_id": "synthetic_cls_d", "task_type": "image_classification", "quality_by_input": {"easy": 0.96, "hard": 0.90}, "compute_factor": 1.25},
+        {"model_id": "synthetic_det_d", "task_type": "object_detection", "quality_by_input": {"easy": 0.95, "hard": 0.90}, "compute_factor": 1.25}
+      ]
+    },
+    {
+      "node_id": "edge_05",
+      "cpu_gflops": 28.0,
+      "memory_mb": 512.0,
+      "bandwidth_mb_s": 20.0,
+      "latency_s": 0.009,
+      "capabilities": [
+        {"model_id": "synthetic_cls_e", "task_type": "image_classification", "quality_by_input": {"easy": 0.90, "hard": 0.86}, "compute_factor": 0.85},
+        {"model_id": "synthetic_det_e", "task_type": "object_detection", "quality_by_input": {"easy": 0.90, "hard": 0.82}, "compute_factor": 1.00}
+      ]
+    },
+    {
+      "node_id": "edge_06",
+      "cpu_gflops": 20.0,
+      "memory_mb": 1536.0,
+      "bandwidth_mb_s": 36.0,
+      "latency_s": 0.007,
+      "capabilities": [
+        {"model_id": "synthetic_cls_f", "task_type": "image_classification", "quality_by_input": {"easy": 0.95, "hard": 0.88}, "compute_factor": 1.10},
+        {"model_id": "synthetic_det_f", "task_type": "object_detection", "quality_by_input": {"easy": 0.97, "hard": 0.92}, "compute_factor": 1.35}
+      ]
+    }
+  ]
+}
